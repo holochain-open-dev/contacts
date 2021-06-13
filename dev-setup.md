@@ -15,7 +15,7 @@ To enter the nix-shell at the root of this repository, simply run `nix-shell` in
 This respository is structured in the following way:
 
 - `ui/`: UI library.
-- `zome/`: example DNA with the `todo_rename` code.
+- `zome/`: example DNA with the `contacts` code.
 - Top level `Cargo.toml` is a virtual package necessary for other DNAs to include this zome by pointing to this git repository.
 - Top level `*.nix` files define the nix environment needed to develop with this repository.
 
