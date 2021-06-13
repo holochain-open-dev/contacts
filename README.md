@@ -17,6 +17,13 @@ This is what is has included:
   - Automated end-to-end testing with the holochain zome
   - See [open-wc](https://open-wc.org/) for all the available tools and documentation
 
+# TODO
+- [x] (Implement zome)
+- [ ] (Pass all tests in tryorama (see [#1](https://github.com/holochain-open-dev/contacts/issues/1))
+- [ ] (Update top level README)
+- [ ] (Add a UI module)
+- [ ] (Add a storybook)
+
 ## How to scaffold a holochain reusable module
 
 1. Create a new repository from this template (you can use the `Use this template` button on the top of this page).
