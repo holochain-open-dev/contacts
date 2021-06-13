@@ -1,0 +1,14 @@
+[package]
+name = "contacts"
+version = "0.0.1"
+authors = [ "https://github.com/hc-institute-japan" ]
+edition = "2018"
+
+[lib]
+name = "contacts"
+crate-type = [ "cdylib", "rlib" ]
+
+[dependencies]
+derive_more = "0"
+serde = "1"
+hdk = "0.0.100"
