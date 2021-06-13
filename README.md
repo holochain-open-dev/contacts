@@ -18,11 +18,11 @@ This is what is has included:
   - See [open-wc](https://open-wc.org/) for all the available tools and documentation
 
 # TODO
-- [x] (Implement zome)
-- [ ] (Pass all tests in tryorama (see [#1](https://github.com/holochain-open-dev/contacts/issues/1))
-- [ ] (Update top level README)
-- [ ] (Add a UI module)
-- [ ] (Add a storybook)
+- [x] Implement zome
+- [ ] Pass all tests in tryorama (see [#1](https://github.com/holochain-open-dev/contacts/issues/1)
+- [ ] Update top level README
+- [ ] Add a UI module
+- [ ] Add a storybook
 
 ## How to scaffold a holochain reusable module
 
