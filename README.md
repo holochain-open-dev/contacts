@@ -21,6 +21,7 @@ This is what is has included:
 - [x] Implement zome
 - [ ] Pass all tests in tryorama (see [#1](https://github.com/holochain-open-dev/contacts/issues/1))
 - [ ] Update top level README
+- [ ] Add explanation of zome in zome level ReadMe
 - [ ] Add a UI module
 - [ ] Add a storybook
 
