@@ -25,11 +25,9 @@ pub fn check_latest_state(
             })
             .collect::<Vec<Contact>>();
 
-        /*
-            can return index 0 as query() orders from latest to oldest
-            max_by_key() could be used which is more accurate but also expensive
-            NOTE: can break with breaking change on query
-        */
+        // can return index 0 as query() is ordered from latest to oldest in query_contacts().
+        // max_by_key() could be used which is more accurate but also expensive
+        // NOTE: can break with breaking change on query
 
         if maybe_contacts.get(0).is_some() {
             let contact: Contact = maybe_contacts.get(0).unwrap().clone();
@@ -102,7 +100,7 @@ pub fn query_contacts() -> ExternResult<Vec<Contact>> {
         .include_entries(true)
         .header_type(HeaderType::Create);
 
-    let contacts: Vec<Contact> = query(filter)?
+    let mut contacts: Vec<Contact> = query(filter)?
         .into_iter()
         .filter_map(|e| {
             if let Ok(Some(contact)) = e.into_inner().1.to_app_option::<Contact>() {
@@ -112,7 +110,7 @@ pub fn query_contacts() -> ExternResult<Vec<Contact>> {
             }
         })
         .collect::<Vec<Contact>>();
-
+    contacts.reverse();
     Ok(contacts)
 }
 

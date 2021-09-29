@@ -1,20 +1,20 @@
 use hdk::prelude::*;
 use timestamp::Timestamp;
 
-pub mod helpers;
-pub mod list_added;
-pub mod in_contacts;
-pub mod in_blocked;
-pub mod list_blocked;
 pub mod add_contacts;
 pub mod block_contacts;
+pub mod helpers;
+pub mod in_blocked;
+pub mod in_contacts;
+pub mod list_added;
+pub mod list_blocked;
 pub mod remove_contacts;
 pub mod unblock_contacts;
 
 #[derive(Deserialize, Serialize, SerializedBytes, Debug)]
 pub struct BooleanWrapper(pub bool);
 
-#[derive(Deserialize, Serialize, SerializedBytes, Debug)]
+#[derive(Deserialize, Serialize, SerializedBytes, Debug, Clone)]
 pub struct AgentPubKeysWrapper(pub Vec<AgentPubKey>);
 
 #[derive(Clone, Deserialize, PartialEq, Serialize, SerializedBytes, Debug)]
@@ -31,7 +31,6 @@ pub struct Contact {
     created: Timestamp,
     contact_type: ContactType,
 }
-
 
 entry_def!(Contact
     EntryDef {
