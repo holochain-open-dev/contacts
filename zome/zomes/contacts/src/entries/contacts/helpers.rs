@@ -2,17 +2,17 @@ use crate::utils::error;
 use hdk::prelude::*;
 use std::collections::{hash_map, HashMap};
 
-use super::{AgentPubKey, AgentPubKeysWrapper, Contact, ContactType};
+use super::{AgentPubKey, Contact, ContactType};
 
 pub fn check_latest_state(
-    agent_pubkeys: &AgentPubKeysWrapper,
+    agent_pubkeys: &Vec<AgentPubKey>,
     check_for: ContactType,
 ) -> ExternResult<()> {
     let mut agents_to_contact_type: HashMap<AgentPubKey, Option<Contact>> =
         std::collections::HashMap::new();
     let sorted_contacts: Vec<Contact> = query_contacts()?;
 
-    for agent in &agent_pubkeys.0 {
+    for agent in agent_pubkeys {
         let maybe_contacts = sorted_contacts
             .clone()
             .into_iter()
@@ -114,7 +114,7 @@ pub fn query_contacts() -> ExternResult<Vec<Contact>> {
     Ok(contacts)
 }
 
-pub fn list_added_or_blocked(filter: ContactType) -> ExternResult<AgentPubKeysWrapper> {
+pub fn list_added_or_blocked(filter: ContactType) -> ExternResult<Vec<AgentPubKey>> {
     let mut agents_to_contact_types: HashMap<AgentPubKey, Vec<Contact>> =
         std::collections::HashMap::new();
     let sorted_contacts: Vec<Contact> = query_contacts()?;
@@ -154,5 +154,5 @@ pub fn list_added_or_blocked(filter: ContactType) -> ExternResult<AgentPubKeysWr
         })
         .collect();
 
-    Ok(AgentPubKeysWrapper(filtered_agents))
+    Ok(filtered_agents)
 }
