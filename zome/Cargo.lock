@@ -12,28 +12,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "arrayref"
-version = "0.3.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4c527152e37cf757a3f78aae5a06fbeefdb07ccc535c980a3208ee3060dd544"
-
-[[package]]
-name = "arrayvec"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23b62fc65de8e4e7f52534fb52b0f3ed04746ae267519eef2a83941e8085068b"
-
-[[package]]
 name = "autocfg"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cdb031dd78e28731d87d56cc8ffef4a8f36ca26c38fe2de700543e627f8a464a"
-
-[[package]]
-name = "base64"
-version = "0.13.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
 
 [[package]]
 name = "bit-set"
@@ -55,17 +37,6 @@ name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
-
-[[package]]
-name = "blake2b_simd"
-version = "0.5.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "afa748e348ad3be8263be728124b24a24f268266f6f5d58af9d75f6a40b5c587"
-dependencies = [
- "arrayref",
- "arrayvec",
- "constant_time_eq",
-]
 
 [[package]]
 name = "byteorder"
@@ -93,18 +64,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "constant_time_eq"
-version = "0.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
-
-[[package]]
 name = "contacts"
 version = "0.0.1"
 dependencies = [
  "derive_more",
  "hdk",
- "holo_hash 0.0.15",
  "serde",
 ]
 
@@ -147,12 +111,12 @@ checksum = "ab5ef0d4909ef3724cc8cce6ccc8572c5c817592e9285f5464f8e86f8bd3726e"
 
 [[package]]
 name = "hdk"
-version = "0.0.120"
+version = "0.0.121"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7cc8c6e4cf2a35cda1858d3af053bf0e5b54f12f09b0867771728455d32230bb"
+checksum = "62cb59e1431b4cfcd8f68bdc137657d5938fa14fea40949d4c560b1a66c41424"
 dependencies = [
  "hdk_derive",
- "holo_hash 0.0.17",
+ "holo_hash",
  "holochain_wasmer_guest",
  "holochain_zome_types",
  "paste",
@@ -166,9 +130,9 @@ dependencies = [
 
 [[package]]
 name = "hdk_derive"
-version = "0.0.22"
+version = "0.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89d426a0ea33d1487cd70fe38f98de0f2f1fc9f9032fb40b17b48eb54619c813"
+checksum = "59946b9ecef873d41a633f344d89a032748ceaab1d6e7b938f0e87748a2d071a"
 dependencies = [
  "holochain_zome_types",
  "paste",
@@ -179,25 +143,9 @@ dependencies = [
 
 [[package]]
 name = "holo_hash"
-version = "0.0.15"
+version = "0.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5397a0aa6c6cac2846b26baf1b705b6add5713268a89e4377d55d577f88368f6"
-dependencies = [
- "base64",
- "blake2b_simd",
- "derive_more",
- "holochain_serialized_bytes",
- "kitsune_p2p_dht_arc",
- "serde",
- "serde_bytes",
- "thiserror",
-]
-
-[[package]]
-name = "holo_hash"
-version = "0.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "38cdca113cb7ab2f133178684b842216cbfa3c0882845adc8652c5f0d39b3d53"
+checksum = "67d522a7fae4adfdb6df41dea1d3045ffa9b9b48d5e907bdb448f2db1c913981"
 dependencies = [
  "holochain_serialized_bytes",
  "kitsune_p2p_dht_arc",
@@ -258,12 +206,12 @@ dependencies = [
 
 [[package]]
 name = "holochain_zome_types"
-version = "0.0.22"
+version = "0.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3613626036f2593c783e718390a9ff975a1220bb0e07a7fc8e378d5bdb43faf2"
+checksum = "fa8cab382054be21bacb021f6729a90d720e5032fcc38807504b6557a7cc1f9e"
 dependencies = [
  "chrono",
- "holo_hash 0.0.17",
+ "holo_hash",
  "holochain_serialized_bytes",
  "holochain_wasmer_common",
  "kitsune_p2p_timestamp",
@@ -315,9 +263,9 @@ checksum = "b71991ff56294aa922b450139ee08b3bfc70982c6b2c7562771375cf73542dd4"
 
 [[package]]
 name = "kitsune_p2p_dht_arc"
-version = "0.0.7"
+version = "0.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1baec5c5af951a43851ade291e6c6056580ee1ab56e687da8414cd9ac919b95b"
+checksum = "d29f72c7abd59327c7ce1c0f5ba7af864f3e3d0740a3be7460ff805feda3bc58"
 dependencies = [
  "derive_more",
  "gcollections",
