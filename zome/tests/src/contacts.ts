@@ -37,6 +37,27 @@ function inBlocked(agentPubKey) {
   return (conductor) => conductor.call("contacts", "in_blocked", agentPubKey);
 }
 
+function createCategory(name) {
+  return (conductor) => conductor.call("contacts", "create_category", name);
+}
+
+function addToCategory(name, id, agentPubKeys) {
+  return (conductor) =>
+    conductor.call("contacts", "add_to_category", {
+      name,
+      id,
+      agents: agentPubKeys,
+    });
+}
+function removeFromCategory(name, id, agentPubKeys) {
+  return (conductor) =>
+    conductor.call("contacts", "remove_from_category", {
+      id,
+      name,
+      agents: agentPubKeys,
+    });
+}
+
 /*
   NOTE: all the calls that return Err are commented out
   as tryorama were throwing errors making
@@ -330,5 +351,56 @@ export default (config, installables) => {
     t.deepEqual(in_blocked_2, true);
     t.deepEqual(in_blocked_3, true);
   });
+
+  orchestrator.run();
+
+  orchestrator = new Orchestrator();
+
+  orchestrator.registerScenario("category related test", async (s, t) => {
+    const [conductor] = await s.players([config]);
+    const [[alice_lobby_happ], [bobby_lobby_happ]] =
+      await conductor.installAgentsHapps(installables.two);
+    const [alice_conductor] = alice_lobby_happ.cells;
+    const [bobby_conductor] = bobby_lobby_happ.cells;
+
+    const [dna_hash_1, agent_pubkey_alice] = alice_conductor.cellId;
+    const [dna_hash_2, agent_pubkey_bobby] = bobby_conductor.cellId;
+
+    // create category
+    const { name, id } = await createCategory("test")(alice_conductor);
+
+    // no contact then add
+    const none_then_add = await addContacts([agent_pubkey_bobby])(
+      alice_conductor
+    );
+
+    // add to category
+    const {
+      name: category_name,
+      id: category_id,
+      agents: agentKeys,
+    } = await addToCategory(name, id, [agent_pubkey_bobby])(alice_conductor);
+
+    // list
+    const added = await listAdded()(alice_conductor);
+    console.log(added);
+
+    // remove from category
+    await removeFromCategory(
+      category_name,
+      category_id,
+      agentKeys
+    )(alice_conductor);
+
+    // list 2
+    const added_2 = await listAdded()(alice_conductor);
+    console.log(added_2);
+
+    t.deepEqual(name, "test");
+    t.deepEqual(added.length, 1);
+    t.deepEqual(added_2.length, 1);
+    t.deepEqual(none_then_add[0], agent_pubkey_bobby);
+  });
+  orchestrator.run();
 };
 orchestrator.run();

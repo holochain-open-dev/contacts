@@ -13,7 +13,7 @@ pub fn block_contacts_handler(agent_ids: Vec<AgentPubKey>) -> ExternResult<Vec<A
     }
 
     check_latest_state(&agent_ids, ContactType::Block)?;
-    let blocked_contact = Contact::new(sys_time()?, agent_ids.clone(), ContactType::Block);
+    let blocked_contact = Contact::new(sys_time()?, agent_ids.clone(), ContactType::Block, None);
     create_entry(&blocked_contact)?;
     Ok(agent_ids)
 }
