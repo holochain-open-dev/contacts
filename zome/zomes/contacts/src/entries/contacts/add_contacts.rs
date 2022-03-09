@@ -6,7 +6,7 @@ use super::{Contact, ContactType};
 
 pub fn add_contacts_handler(agent_ids: Vec<AgentPubKey>) -> ExternResult<Vec<AgentPubKey>> {
     check_latest_state(&agent_ids, ContactType::Add)?;
-    let added_contact = Contact::new(sys_time()?, agent_ids.clone(), ContactType::Add);
+    let added_contact = Contact::new(sys_time()?, agent_ids.clone(), ContactType::Add, None);
     create_entry(&added_contact)?;
     Ok(agent_ids)
 }

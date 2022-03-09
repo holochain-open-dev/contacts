@@ -85,6 +85,37 @@ pub fn check_latest_state(
                 }
             }
         }
+        ContactType::AddToCategory => {
+            for agent_contact in agents_to_contact_type {
+                if let Some(contact) = agent_contact.1 {
+                    match contact.contact_type {
+                        ContactType::Remove | ContactType::Block | ContactType::Unblock => {
+                            return error("agent is not added")
+                        }
+                        _ => (),
+                    }
+                } else {
+                    return error("agent is not added");
+                }
+            }
+        }
+        ContactType::RemoveFromCategory => {
+            for agent_contact in agents_to_contact_type {
+                if let Some(contact) = agent_contact.1 {
+                    match contact.contact_type {
+                        ContactType::Remove | ContactType::Block | ContactType::Unblock => {
+                            return error("agent is not added")
+                        }
+                        ContactType::RemoveFromCategory => {
+                            return error("agent does not have a cateogry")
+                        }
+                        _ => (),
+                    }
+                } else {
+                    return error("agent is not added");
+                }
+            }
+        }
     }
 
     Ok(())
@@ -141,7 +172,11 @@ pub fn list_added_or_blocked(filter: ContactType) -> ExternResult<Vec<AgentPubKe
         .filter_map(|agent_contact_types| {
             let latest_status = agent_contact_types.1.into_iter().max_by_key(|c| c.created);
             if let Some(c) = latest_status {
-                if ContactType::Add == filter && ContactType::Add == c.contact_type {
+                if ContactType::Add == filter
+                    && (ContactType::Add == c.contact_type
+                        || ContactType::AddToCategory == c.contact_type
+                        || ContactType::RemoveFromCategory == c.contact_type)
+                {
                     return Some(agent_contact_types.0);
                 } else if ContactType::Block == filter && ContactType::Block == c.contact_type {
                     return Some(agent_contact_types.0);
