@@ -58,6 +58,23 @@ function removeFromCategory(name, id, agentPubKeys) {
     });
 }
 
+function listCategory() {
+  return (conductor) => conductor.call("contacts", "list_category", null);
+}
+
+function updateAlias(id, firstName, lastName) {
+  return (conductor) =>
+    conductor.call("contacts", "update_alias", {
+      id,
+      first_name: firstName,
+      last_name: lastName,
+    });
+}
+
+function listAlias() {
+  return (conductor) => conductor.call("contacts", "list_alias", null);
+}
+
 /*
   NOTE: all the calls that return Err are commented out
   as tryorama were throwing errors making
@@ -368,6 +385,8 @@ export default (config, installables) => {
 
     // create category
     const { name, id } = await createCategory("test")(alice_conductor);
+    await createCategory("test1")(alice_conductor);
+    await createCategory("test2")(alice_conductor);
 
     // no contact then add
     const none_then_add = await addContacts([agent_pubkey_bobby])(
@@ -396,10 +415,61 @@ export default (config, installables) => {
     const added_2 = await listAdded()(alice_conductor);
     console.log(added_2);
 
+    // list of categories
+    const categories = await listCategory()(alice_conductor);
+
     t.deepEqual(name, "test");
     t.deepEqual(added.length, 1);
     t.deepEqual(added_2.length, 1);
+    t.deepEqual(categories.length, 3);
     t.deepEqual(none_then_add[0], agent_pubkey_bobby);
+  });
+  orchestrator.run();
+
+  orchestrator = new Orchestrator();
+
+  orchestrator.registerScenario("alias related test", async (s, t) => {
+    const [conductor] = await s.players([config]);
+    const [[alice_lobby_happ], [bobby_lobby_happ], [charlie_lobby_happ]] =
+      await conductor.installAgentsHapps(installables.three);
+    const [alice_conductor] = alice_lobby_happ.cells;
+    const [bobby_conductor] = bobby_lobby_happ.cells;
+    const [charlie_conductor] = charlie_lobby_happ.cells;
+
+    const [dna_hash_1, agent_pubkey_alice] = alice_conductor.cellId;
+    const [dna_hash_2, agent_pubkey_bobby] = bobby_conductor.cellId;
+    const [dna_hash_3, agent_pubkey_charlie] = charlie_conductor.cellId;
+
+    // // no contact then add
+    await addContacts([agent_pubkey_bobby])(alice_conductor);
+    await addContacts([agent_pubkey_charlie])(alice_conductor);
+
+    // // update alias
+    const { id, first_name, last_name, created } = await updateAlias(
+      agent_pubkey_bobby,
+      "bob",
+      "marley"
+    )(alice_conductor);
+    await updateAlias(agent_pubkey_bobby, "bobbo", "")(alice_conductor);
+    await updateAlias(agent_pubkey_bobby, "", "")(alice_conductor);
+    await updateAlias(agent_pubkey_bobby, "bobby", "lenard")(alice_conductor);
+    await updateAlias(agent_pubkey_charlie, "charlie", "")(alice_conductor);
+    await updateAlias(agent_pubkey_charlie, "charls", "k")(alice_conductor);
+    await updateAlias(agent_pubkey_charlie, "charlie", "c")(alice_conductor);
+
+    // // list added
+    const added = await listAdded()(alice_conductor);
+    console.log("added contacts", added);
+
+    // list alias
+    const aliases: any = await listAlias()(alice_conductor);
+    console.log("aliases", aliases);
+
+    t.deepEqual(id, agent_pubkey_bobby);
+    t.deepEqual(first_name, "bob");
+    t.deepEqual(last_name, "marley");
+    t.deepEqual(added.length, 2);
+    t.ok(aliases);
   });
   orchestrator.run();
 };
