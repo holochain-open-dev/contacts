@@ -66,8 +66,8 @@ function updateAlias(id, firstName, lastName) {
   return (conductor) =>
     conductor.call("contacts", "update_alias", {
       id,
-      first_name: firstName,
-      last_name: lastName,
+      firstName,
+      lastName,
     });
 }
 
@@ -395,8 +395,8 @@ export default (config, installables) => {
 
     // add to category
     const {
-      name: category_name,
-      id: category_id,
+      name: categoryName,
+      id: categoryId,
       agents: agentKeys,
     } = await addToCategory(name, id, [agent_pubkey_bobby])(alice_conductor);
 
@@ -406,8 +406,8 @@ export default (config, installables) => {
 
     // remove from category
     await removeFromCategory(
-      category_name,
-      category_id,
+      categoryName,
+      categoryId,
       agentKeys
     )(alice_conductor);
 
@@ -440,12 +440,12 @@ export default (config, installables) => {
     const [dna_hash_2, agent_pubkey_bobby] = bobby_conductor.cellId;
     const [dna_hash_3, agent_pubkey_charlie] = charlie_conductor.cellId;
 
-    // // no contact then add
+    // no contact then add
     await addContacts([agent_pubkey_bobby])(alice_conductor);
     await addContacts([agent_pubkey_charlie])(alice_conductor);
 
-    // // update alias
-    const { id, first_name, last_name, created } = await updateAlias(
+    // update alias
+    const { id, firstName, lastName, created } = await updateAlias(
       agent_pubkey_bobby,
       "bob",
       "marley"
@@ -457,7 +457,7 @@ export default (config, installables) => {
     await updateAlias(agent_pubkey_charlie, "charls", "k")(alice_conductor);
     await updateAlias(agent_pubkey_charlie, "charlie", "c")(alice_conductor);
 
-    // // list added
+    // list added
     const added = await listAdded()(alice_conductor);
     console.log("added contacts", added);
 
@@ -466,8 +466,8 @@ export default (config, installables) => {
     console.log("aliases", aliases);
 
     t.deepEqual(id, agent_pubkey_bobby);
-    t.deepEqual(first_name, "bob");
-    t.deepEqual(last_name, "marley");
+    t.deepEqual(firstName, "bob");
+    t.deepEqual(lastName, "marley");
     t.deepEqual(added.length, 2);
     t.ok(aliases);
   });

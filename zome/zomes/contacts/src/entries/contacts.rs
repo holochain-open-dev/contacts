@@ -28,6 +28,7 @@ pub enum ContactType {
 }
 
 #[derive(Clone, Deserialize, PartialEq, Serialize, SerializedBytes, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct CategoryIO {
     id: EntryHash,
     name: String,
@@ -35,12 +36,14 @@ pub struct CategoryIO {
 }
 
 #[derive(Clone, Deserialize, PartialEq, Serialize, SerializedBytes, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct CategoryWithId {
     id: EntryHash,
     name: String,
 }
 
 #[derive(Clone, Deserialize, PartialEq, Serialize, SerializedBytes, Debug)]
+#[serde(rename_all = "camelCase")]
 pub struct ContactOutput {
     id: AgentPubKey,
     first_name: Option<String>,
@@ -104,6 +107,7 @@ impl Category {
 }
 
 #[derive(Deserialize, Serialize, SerializedBytes, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct AliasInput {
     id: AgentPubKey,
     first_name: Option<String>,
@@ -111,6 +115,7 @@ pub struct AliasInput {
 }
 
 #[derive(Deserialize, Serialize, SerializedBytes, Debug, Clone)]
+#[serde(rename_all = "camelCase")]
 pub struct Alias {
     id: AgentPubKey,
     first_name: Option<String>,
