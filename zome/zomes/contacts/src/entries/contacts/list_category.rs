@@ -1,4 +1,5 @@
 use hdk::prelude::*;
+use holo_hash::EntryHashB64;
 
 use super::{Category, CategoryWithId};
 
@@ -17,9 +18,10 @@ pub fn list_category_handler() -> ExternResult<Vec<CategoryWithId>> {
         .filter_map(|e| {
             if let Ok(Some(category)) = e.clone().into_inner().1.to_app_option::<Category>() {
                 // we can unwrap here as the assumption is that entry hash always exists
-                let entry_hash = e.header().entry_hash().unwrap().to_owned();
+                let entry_hash_b64: EntryHashB64 =
+                    e.header().entry_hash().unwrap().to_owned().into();
                 let category_with_id = CategoryWithId {
-                    id: entry_hash,
+                    id: entry_hash_b64,
                     name: category.name,
                 };
                 return Some(category_with_id);

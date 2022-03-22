@@ -5,12 +5,13 @@ use entries::contacts::list_category::list_category_handler;
 use entries::contacts::remove_from_category::remove_from_category_handler;
 use entries::contacts::update_alias::update_alias_handler;
 use hdk::prelude::*;
+use holo_hash::AgentPubKeyB64;
 use std::collections::HashMap;
 
 mod entries;
 mod utils;
 
-use contacts::{Alias, AliasInput, Category, CategoryIO, CategoryWithId, Contact, ContactOutput};
+use contacts::{Alias, AliasIO, Category, CategoryIO, CategoryWithId, Contact, ContactOutput};
 use entries::contacts::{self};
 
 use contacts::add_contacts::add_contacts_handler;
@@ -29,22 +30,22 @@ entry_defs![
 ];
 
 #[hdk_extern]
-fn add_contacts(agent_ids: Vec<AgentPubKey>) -> ExternResult<Vec<AgentPubKey>> {
+fn add_contacts(agent_ids: Vec<AgentPubKeyB64>) -> ExternResult<Vec<AgentPubKeyB64>> {
     add_contacts_handler(agent_ids)
 }
 
 #[hdk_extern]
-fn remove_contacts(agent_ids: Vec<AgentPubKey>) -> ExternResult<Vec<AgentPubKey>> {
+fn remove_contacts(agent_ids: Vec<AgentPubKeyB64>) -> ExternResult<Vec<AgentPubKeyB64>> {
     remove_contacts_handler(agent_ids)
 }
 
 #[hdk_extern]
-fn block_contacts(agent_ids: Vec<AgentPubKey>) -> ExternResult<Vec<AgentPubKey>> {
+fn block_contacts(agent_ids: Vec<AgentPubKeyB64>) -> ExternResult<Vec<AgentPubKeyB64>> {
     block_contacts_handler(agent_ids)
 }
 
 #[hdk_extern]
-fn unblock_contacts(agent_ids: Vec<AgentPubKey>) -> ExternResult<Vec<AgentPubKey>> {
+fn unblock_contacts(agent_ids: Vec<AgentPubKeyB64>) -> ExternResult<Vec<AgentPubKeyB64>> {
     unblock_contacts_handler(agent_ids)
 }
 
@@ -59,12 +60,12 @@ fn list_blocked(_: ()) -> ExternResult<Vec<ContactOutput>> {
 }
 
 #[hdk_extern]
-fn in_contacts(agent_pubkey: AgentPubKey) -> ExternResult<bool> {
+fn in_contacts(agent_pubkey: AgentPubKeyB64) -> ExternResult<bool> {
     in_contacts_handler(agent_pubkey)
 }
 
 #[hdk_extern]
-fn in_blocked(agent_pubkey: AgentPubKey) -> ExternResult<bool> {
+fn in_blocked(agent_pubkey: AgentPubKeyB64) -> ExternResult<bool> {
     in_blocked_handler(agent_pubkey)
 }
 
@@ -89,11 +90,11 @@ fn list_category(_: ()) -> ExternResult<Vec<CategoryWithId>> {
 }
 
 #[hdk_extern]
-fn update_alias(input: AliasInput) -> ExternResult<Alias> {
+fn update_alias(input: AliasIO) -> ExternResult<AliasIO> {
     update_alias_handler(input)
 }
 
 #[hdk_extern]
-fn list_alias(_: ()) -> ExternResult<HashMap<String, Option<Alias>>> {
+fn list_alias(_: ()) -> ExternResult<HashMap<String, Option<AliasIO>>> {
     list_alias_handler()
 }

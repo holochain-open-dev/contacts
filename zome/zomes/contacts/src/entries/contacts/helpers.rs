@@ -1,9 +1,10 @@
 use crate::utils::error;
 use hdk::prelude::*;
+use holo_hash::AgentPubKeyB64;
 use std::collections::{hash_map, HashMap};
 
 use super::{
-    list_alias::list_alias_handler, AgentPubKey, Alias, Contact, ContactOutput, ContactType,
+    list_alias::list_alias_handler, AgentPubKey, AliasIO, Contact, ContactOutput, ContactType,
 };
 
 pub fn check_latest_state(
@@ -168,7 +169,7 @@ pub fn list_added_or_blocked(filter: ContactType) -> ExternResult<Vec<ContactOut
             }
         }
     }
-    let alias_per_agent: HashMap<String, Option<Alias>> = list_alias_handler()?;
+    let alias_per_agent: HashMap<String, Option<AliasIO>> = list_alias_handler()?;
 
     let filtered_agents = agents_to_contact_types
         .into_iter()
@@ -187,17 +188,17 @@ pub fn list_added_or_blocked(filter: ContactType) -> ExternResult<Vec<ContactOut
                         _alias_per_agent.entry(agent_contact_types.0.to_owned().to_string());
                     match maybe_alias {
                         hash_map::Entry::Occupied(o) => {
-                            let maybe_alias: &mut Option<Alias> = o.into_mut();
+                            let maybe_alias: &mut Option<AliasIO> = o.into_mut();
                             if let Some(alias) = maybe_alias {
                                 contact_output = Some(ContactOutput {
-                                    id: agent_contact_types.0.to_owned(),
+                                    id: agent_contact_types.0.to_owned().into(),
                                     first_name: alias.first_name.clone(),
                                     last_name: alias.last_name.clone(),
                                     category: c.category,
                                 })
                             } else {
                                 contact_output = Some(ContactOutput {
-                                    id: agent_contact_types.0.to_owned(),
+                                    id: agent_contact_types.0.to_owned().into(),
                                     first_name: None,
                                     last_name: None,
                                     category: c.category,
@@ -206,7 +207,7 @@ pub fn list_added_or_blocked(filter: ContactType) -> ExternResult<Vec<ContactOut
                         }
                         hash_map::Entry::Vacant(_) => {
                             contact_output = Some(ContactOutput {
-                                id: agent_contact_types.0.to_owned(),
+                                id: agent_contact_types.0.to_owned().into(),
                                 first_name: None,
                                 last_name: None,
                                 category: c.category,
@@ -216,7 +217,7 @@ pub fn list_added_or_blocked(filter: ContactType) -> ExternResult<Vec<ContactOut
                     return Some(contact_output);
                 } else if ContactType::Block == filter && ContactType::Block == c.contact_type {
                     contact_output = Some(ContactOutput {
-                        id: agent_contact_types.0,
+                        id: agent_contact_types.0.into(),
                         first_name: None,
                         last_name: None,
                         category: c.category,
@@ -233,4 +234,13 @@ pub fn list_added_or_blocked(filter: ContactType) -> ExternResult<Vec<ContactOut
         .collect();
 
     Ok(filtered_agents)
+}
+
+pub fn b64_to_agent_pk(keys: Vec<AgentPubKeyB64>) -> Vec<AgentPubKey> {
+    keys.into_iter()
+        .map(|key| {
+            let b64: AgentPubKey = key.into();
+            return b64;
+        })
+        .collect()
 }

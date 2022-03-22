@@ -2,12 +2,11 @@ use std::collections::{hash_map, HashMap};
 
 use hdk::prelude::*;
 
-use super::Alias;
+use super::{Alias, AliasIO};
 
-pub fn list_alias_handler() -> ExternResult<HashMap<String, Option<Alias>>> {
-    debug!("this is running 1");
+pub fn list_alias_handler() -> ExternResult<HashMap<String, Option<AliasIO>>> {
     let mut agents_to_aliases: HashMap<AgentPubKey, Vec<Alias>> = std::collections::HashMap::new();
-    let mut agents_to_maybe_alias: HashMap<String, Option<Alias>> =
+    let mut agents_to_maybe_alias: HashMap<String, Option<AliasIO>> =
         std::collections::HashMap::new();
     let filter = QueryFilter::new()
         .entry_type(EntryType::App(AppEntryType::new(
@@ -18,7 +17,6 @@ pub fn list_alias_handler() -> ExternResult<HashMap<String, Option<Alias>>> {
         .include_entries(true)
         .header_type(HeaderType::Create);
 
-    debug!("this is running 2");
     query(filter)?.into_iter().for_each(|e| {
         if let Ok(Some(alias)) = e.into_inner().1.to_app_option::<Alias>() {
             let id = alias.id.clone();
@@ -36,17 +34,20 @@ pub fn list_alias_handler() -> ExternResult<HashMap<String, Option<Alias>>> {
             }
         }
     });
-    debug!("this is running 3");
 
     agents_to_aliases.into_iter().for_each(|agent_to_alias| {
         let latest_alias = agent_to_alias.1.into_iter().max_by_key(|a| a.created);
         if let Some(alias) = latest_alias {
-            agents_to_maybe_alias.insert(agent_to_alias.0.to_string(), Some(alias));
+            let alias_output = AliasIO {
+                id: alias.id.into(),
+                first_name: alias.first_name,
+                last_name: alias.last_name,
+            };
+            agents_to_maybe_alias.insert(agent_to_alias.0.to_string(), Some(alias_output));
         } else {
             agents_to_maybe_alias.insert(agent_to_alias.0.to_string(), None);
         };
     });
-    debug!("this is running 4");
 
     Ok(agents_to_maybe_alias)
 }

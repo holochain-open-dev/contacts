@@ -1,4 +1,5 @@
 use hdk::prelude::*;
+use holo_hash::{AgentPubKeyB64, EntryHashB64};
 use timestamp::Timestamp;
 
 pub mod add_contacts;
@@ -30,7 +31,7 @@ pub enum ContactType {
 #[derive(Clone, Deserialize, PartialEq, Serialize, SerializedBytes, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CategoryIO {
-    id: EntryHash,
+    id: EntryHashB64,
     name: String,
     agents: Vec<AgentPubKey>,
 }
@@ -38,14 +39,14 @@ pub struct CategoryIO {
 #[derive(Clone, Deserialize, PartialEq, Serialize, SerializedBytes, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CategoryWithId {
-    id: EntryHash,
+    id: EntryHashB64,
     name: String,
 }
 
 #[derive(Clone, Deserialize, PartialEq, Serialize, SerializedBytes, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ContactOutput {
-    id: AgentPubKey,
+    id: AgentPubKeyB64,
     first_name: Option<String>,
     last_name: Option<String>,
     category: Option<CategoryWithId>,
@@ -108,8 +109,8 @@ impl Category {
 
 #[derive(Deserialize, Serialize, SerializedBytes, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct AliasInput {
-    id: AgentPubKey,
+pub struct AliasIO {
+    id: AgentPubKeyB64,
     first_name: Option<String>,
     last_name: Option<String>,
 }
@@ -118,9 +119,9 @@ pub struct AliasInput {
 #[serde(rename_all = "camelCase")]
 pub struct Alias {
     id: AgentPubKey,
-    first_name: Option<String>,
+    first_name: Option<String>, // this could be a BtreeMap too if more (customizeable) fields are needed
     last_name: Option<String>,
-    created: Timestamp,
+    created: Timestamp, // to determine the latest alias set for a particular contact
 }
 
 entry_def!(Alias
