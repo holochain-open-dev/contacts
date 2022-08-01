@@ -1,8 +1,13 @@
 use hdk::prelude::*;
 
-use super::helpers::check_latest_state;
-use super::{CategoryIO, CategoryWithId, Contact, ContactType, EntryTypes};
-use crate::utils::error;
+use contacts_integrity::*;
+use contacts_integrity_types::*;
+use contacts_coordinator_types::*;
+
+use crate::{
+    helpers::check_latest_state, 
+    utils::error
+};
 
 pub fn add_to_category_handler(io: CategoryIO) -> ExternResult<CategoryIO> {
     check_latest_state(&io.agents, ContactType::AddToCategory)?;

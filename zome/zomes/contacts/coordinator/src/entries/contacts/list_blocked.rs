@@ -1,8 +1,9 @@
 use hdk::prelude::*;
 
-use super::helpers::list_added_or_blocked;
+use contacts_integrity_types::*;
+use contacts_coordinator_types::*;
 
-use super::{ContactOutput, ContactType};
+use crate::helpers::list_added_or_blocked;
 
 pub fn list_blocked_handler() -> ExternResult<Vec<ContactOutput>> {
     Ok(list_added_or_blocked(ContactType::Block)?)
