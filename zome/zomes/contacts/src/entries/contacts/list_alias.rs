@@ -11,11 +11,11 @@ pub fn list_alias_handler() -> ExternResult<HashMap<String, Option<AliasIO>>> {
     let filter = QueryFilter::new()
         .entry_type(EntryType::App(AppEntryType::new(
             EntryDefIndex::from(2),
-            zome_info()?.id,
+            // zome_info()?.id,
             EntryVisibility::Private,
         )))
         .include_entries(true)
-        .header_type(HeaderType::Create);
+        .action_type(ActionType::Create);
 
     query(filter)?.into_iter().for_each(|e| {
         if let Ok(Some(alias)) = e.into_inner().1.to_app_option::<Alias>() {

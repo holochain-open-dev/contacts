@@ -11,7 +11,7 @@ use std::collections::HashMap;
 mod entries;
 mod utils;
 
-use contacts::{Alias, AliasIO, Category, CategoryIO, CategoryWithId, Contact, ContactOutput};
+use contacts::{AliasIO, CategoryIO, CategoryWithId, ContactOutput};
 use entries::contacts::{self};
 
 use contacts::add_contacts::add_contacts_handler;
@@ -23,11 +23,11 @@ use contacts::list_blocked::list_blocked_handler;
 use contacts::remove_contacts::remove_contacts_handler;
 use contacts::unblock_contacts::unblock_contacts_handler;
 
-entry_defs![
-    Contact::entry_def(),
-    Category::entry_def(),
-    Alias::entry_def()
-];
+// entry_defs![
+//     Contact::entry_def(),
+//     Category::entry_def(),
+//     Alias::entry_def()
+// ];
 
 #[hdk_extern]
 fn add_contacts(agent_ids: Vec<AgentPubKeyB64>) -> ExternResult<Vec<AgentPubKeyB64>> {

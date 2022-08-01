@@ -52,7 +52,8 @@ pub struct ContactOutput {
     category: Option<CategoryWithId>,
 }
 
-#[derive(Deserialize, Serialize, SerializedBytes, Debug, Clone)]
+#[derive(Clone)]
+#[hdk_entry_helper]
 pub struct Contact {
     agent_ids: Vec<AgentPubKey>,
     created: Timestamp,
@@ -60,15 +61,15 @@ pub struct Contact {
     category: Option<CategoryWithId>,
 }
 
-entry_def!(Contact
-    EntryDef {
-        id: "contact".into(),
-        visibility: EntryVisibility::Private,
-        crdt_type: CrdtType,
-        required_validations: RequiredValidations::default(),
-        required_validation_type: RequiredValidationType::Element
-    }
-);
+// entry_def!(Contact
+//     EntryDef {
+//         id: "contact".into(),
+//         visibility: EntryVisibility::Private,
+//         crdt_type: CrdtType,
+//         required_validations: RequiredValidations::default(),
+//         required_validation_type: RequiredValidationType::Record
+//     }
+// );
 
 impl Contact {
     pub fn new(
@@ -86,20 +87,21 @@ impl Contact {
     }
 }
 
-#[derive(Deserialize, Serialize, SerializedBytes, Debug, Clone)]
+#[derive(Clone)]
+#[hdk_entry_helper]
 pub struct Category {
     name: String,
 }
 
-entry_def!(Category
-    EntryDef {
-        id: "category".into(),
-        visibility: EntryVisibility::Private,
-        crdt_type: CrdtType,
-        required_validations: RequiredValidations::default(),
-        required_validation_type: RequiredValidationType::Element
-    }
-);
+// entry_def!(Category
+//     EntryDef {
+//         id: "category".into(),
+//         visibility: EntryVisibility::Private,
+//         crdt_type: CrdtType,
+//         required_validations: RequiredValidations::default(),
+//         required_validation_type: RequiredValidationType::Record
+//     }
+// );
 
 impl Category {
     pub fn new(name: String) -> Self {
@@ -115,8 +117,8 @@ pub struct AliasIO {
     last_name: Option<String>,
 }
 
-#[derive(Deserialize, Serialize, SerializedBytes, Debug, Clone)]
-#[serde(rename_all = "camelCase")]
+#[derive(Clone)]
+#[hdk_entry_helper]
 pub struct Alias {
     id: AgentPubKey,
     first_name: Option<String>, // this could be a BtreeMap too if more (customizeable) fields are needed
@@ -124,12 +126,23 @@ pub struct Alias {
     created: Timestamp, // to determine the latest alias set for a particular contact
 }
 
-entry_def!(Alias
-    EntryDef {
-        id: "alias".into(),
-        visibility: EntryVisibility::Private,
-        crdt_type: CrdtType,
-        required_validations: RequiredValidations::default(),
-        required_validation_type: RequiredValidationType::Element
-    }
-);
+// entry_def!(Alias
+//     EntryDef {
+//         id: "alias".into(),
+//         visibility: EntryVisibility::Private,
+//         crdt_type: CrdtType,
+//         required_validations: RequiredValidations::default(),
+//         required_validation_type: RequiredValidationType::Record
+//     }
+// );
+
+#[hdk_entry_defs]
+#[unit_enum(UnitEntryTypes)]
+pub enum EntryTypes {
+    #[entry_def(required_validations = 5, visibility = "private")]
+    Contact(Contact),
+    #[entry_def(required_validations = 5, visibility = "private")]
+    Category(Category),
+    #[entry_def(required_validations = 5, visibility = "private")]
+    Alias(Alias),
+}

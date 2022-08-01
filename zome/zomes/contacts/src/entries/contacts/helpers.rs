@@ -128,11 +128,11 @@ pub fn query_contacts() -> ExternResult<Vec<Contact>> {
     let filter = QueryFilter::new()
         .entry_type(EntryType::App(AppEntryType::new(
             EntryDefIndex::from(0),
-            zome_info()?.id,
+            // zome_info()?.id,
             EntryVisibility::Private,
         )))
         .include_entries(true)
-        .header_type(HeaderType::Create);
+        .action_type(ActionType::Create);
 
     let mut contacts: Vec<Contact> = query(filter)?
         .into_iter()
