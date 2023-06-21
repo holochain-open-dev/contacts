@@ -1,8 +1,13 @@
 ---
 manifest_version: "1"
 name: contacts
-uuid: 00000000-0000-0000-0000-000000000000
-properties: ~
-zomes:
-  - name: contacts
-    bundled: ../../target/wasm32-unknown-unknown/release/contacts.wasm
+integrity:
+  uuid: 00000000-0000-0000-0000-000000000000
+  properties: ~
+  zomes:
+    - name: contacts
+      bundled: ../../target/wasm32-unknown-unknown/release/contacts_integrity.wasm
+coordinator:
+  zomes:
+    - name: contacts_coordinator
+      bundled: ../../target/wasm32-unknown-unknown/release/contacts_coordinator.wasm

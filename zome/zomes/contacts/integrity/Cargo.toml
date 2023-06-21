@@ -1,0 +1,18 @@
+[package]
+authors = ["nickolie.pangarungan@gmail.com", "tatsuya.g.sato@yumeville.com"]
+description = "Integrity for contacts zome"
+edition = "2021"
+license = "MIT"
+name = "contacts_integrity"
+version = "0.0.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "contacts_integrity"
+
+[dependencies]
+derive_more = "0"
+serde = "1"
+
+contacts_integrity_types = {path = "../types/integrity_types"}
+hdi = "0.0.14"

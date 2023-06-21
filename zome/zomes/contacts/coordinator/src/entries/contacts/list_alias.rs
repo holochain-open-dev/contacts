@@ -1,8 +1,8 @@
+use hdk::prelude::*;
 use std::collections::{hash_map, HashMap};
 
-use hdk::prelude::*;
-
-use super::{Alias, AliasIO};
+use contacts_integrity_types::*;
+use contacts_coordinator_types::*;
 
 pub fn list_alias_handler() -> ExternResult<HashMap<String, Option<AliasIO>>> {
     let mut agents_to_aliases: HashMap<AgentPubKey, Vec<Alias>> = std::collections::HashMap::new();
@@ -15,7 +15,7 @@ pub fn list_alias_handler() -> ExternResult<HashMap<String, Option<AliasIO>>> {
             EntryVisibility::Private,
         )))
         .include_entries(true)
-        .header_type(HeaderType::Create);
+        .action_type(ActionType::Create);
 
     query(filter)?.into_iter().for_each(|e| {
         if let Ok(Some(alias)) = e.into_inner().1.to_app_option::<Alias>() {

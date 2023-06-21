@@ -1,10 +1,12 @@
-use crate::utils::error;
 use hdk::prelude::*;
-use holo_hash::AgentPubKeyB64;
 use std::collections::{hash_map, HashMap};
 
-use super::{
-    list_alias::list_alias_handler, AgentPubKey, AliasIO, Contact, ContactOutput, ContactType,
+use contacts_integrity_types::*;
+use contacts_coordinator_types::*;
+
+use crate::{
+    list_alias::list_alias_handler,
+    utils::error
 };
 
 pub fn check_latest_state(
@@ -132,7 +134,7 @@ pub fn query_contacts() -> ExternResult<Vec<Contact>> {
             EntryVisibility::Private,
         )))
         .include_entries(true)
-        .header_type(HeaderType::Create);
+        .action_type(ActionType::Create);
 
     let mut contacts: Vec<Contact> = query(filter)?
         .into_iter()
@@ -236,11 +238,11 @@ pub fn list_added_or_blocked(filter: ContactType) -> ExternResult<Vec<ContactOut
     Ok(filtered_agents)
 }
 
-pub fn b64_to_agent_pk(keys: Vec<AgentPubKeyB64>) -> Vec<AgentPubKey> {
-    keys.into_iter()
-        .map(|key| {
-            let b64: AgentPubKey = key.into();
-            return b64;
-        })
-        .collect()
-}
+// pub fn b64_to_agent_pk(keys: Vec<AgentPubKeyB64>) -> Vec<AgentPubKey> {
+//     keys.into_iter()
+//         .map(|key| {
+//             let b64: AgentPubKey = key.into();
+//             return b64;
+//         })
+//         .collect()
+// }

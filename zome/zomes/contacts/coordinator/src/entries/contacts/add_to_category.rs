@@ -1,8 +1,13 @@
 use hdk::prelude::*;
 
-use super::helpers::check_latest_state;
+use contacts_integrity::*;
+use contacts_integrity_types::*;
+use contacts_coordinator_types::*;
 
-use super::{CategoryIO, CategoryWithId, Contact, ContactType};
+use crate::{
+    helpers::check_latest_state, 
+    utils::error
+};
 
 pub fn add_to_category_handler(io: CategoryIO) -> ExternResult<CategoryIO> {
     check_latest_state(&io.agents, ContactType::AddToCategory)?;
@@ -15,6 +20,10 @@ pub fn add_to_category_handler(io: CategoryIO) -> ExternResult<CategoryIO> {
             id: io.id.clone(),
         }),
     );
-    create_entry(&added_contact)?;
-    Ok(io)
+    // create_entry(&added_contact)?;
+    // Ok(io)
+    match create_entry(&EntryTypes::Contact(added_contact.clone())) {
+        Ok(_) => Ok(io),
+        Err(_) => error("problems were encountered during creation of entry"),
+    }
 }
