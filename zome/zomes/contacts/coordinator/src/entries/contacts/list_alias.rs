@@ -1,15 +1,15 @@
 use hdk::prelude::*;
 use std::collections::{hash_map, HashMap};
 
-use contacts_integrity_types::*;
 use contacts_coordinator_types::*;
+use contacts_integrity_types::*;
 
 pub fn list_alias_handler() -> ExternResult<HashMap<String, Option<AliasIO>>> {
     let mut agents_to_aliases: HashMap<AgentPubKey, Vec<Alias>> = std::collections::HashMap::new();
     let mut agents_to_maybe_alias: HashMap<String, Option<AliasIO>> =
         std::collections::HashMap::new();
     let filter = QueryFilter::new()
-        .entry_type(EntryType::App(AppEntryType::new(
+        .entry_type(EntryType::App(AppEntryDef::new(
             EntryDefIndex::from(2),
             zome_info()?.id,
             EntryVisibility::Private,
