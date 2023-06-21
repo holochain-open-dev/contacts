@@ -1,13 +1,10 @@
 use hdk::prelude::*;
 use std::collections::{hash_map, HashMap};
 
-use contacts_integrity_types::*;
 use contacts_coordinator_types::*;
+use contacts_integrity_types::*;
 
-use crate::{
-    list_alias::list_alias_handler,
-    utils::error
-};
+use crate::{list_alias::list_alias_handler, utils::error};
 
 pub fn check_latest_state(
     agent_pubkeys: &Vec<AgentPubKey>,
@@ -128,7 +125,7 @@ pub fn check_latest_state(
 
 pub fn query_contacts() -> ExternResult<Vec<Contact>> {
     let filter = QueryFilter::new()
-        .entry_type(EntryType::App(AppEntryType::new(
+        .entry_type(EntryType::App(AppEntryDef::new(
             EntryDefIndex::from(0),
             zome_info()?.id,
             EntryVisibility::Private,
